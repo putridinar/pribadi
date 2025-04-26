@@ -1,0 +1,25 @@
+# Site settings
+title: AkuPayu
+description: 
+baseurl: ""
+url: "https://yourdomain.com"
+
+# Markdown settings
+markdown: kramdown
+
+# Sass settings
+sass:
+  sass_dir: assets/sass
+  style: :compressed
+
+# Build settings
+exclude:
+  - package.json
+  - README.md
+  - CNAME
+  - assets/sass
+
+# Plugin settings
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap

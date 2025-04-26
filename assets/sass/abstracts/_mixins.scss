@@ -1,0 +1,21 @@
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Responsive for mobile
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+// Example usage:
+// .box {
+//   width: 500px;
+
+//   @include mobile {
+//     width: 100%;
+//   }
+// }

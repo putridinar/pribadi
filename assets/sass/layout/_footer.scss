@@ -1,0 +1,100 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.footer {
+  background: linear-gradient(to right, #434343, #000000);
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+  
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 50px;
+    flex-wrap: wrap;
+  }
+
+  &__logo {
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  }
+
+  &__nav h3,
+  &__social h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  &__nav ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      
+      &:hover {
+        color: #f1c40f; /* Gold color on hover */
+      }
+    }
+  }
+
+  &__social .social-icons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
+
+    .social-icon {
+      color: #fff;
+      font-size: 1.5rem;
+      transition: transform 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        color: #f1c40f; /* Gold color on hover */
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  &__bottom {
+    padding: 20px 0;
+    background-color: #333;
+    color: #fff;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 30px;
+    border-radius: 8px;
+    
+    p {
+      margin: 0;
+      font-weight: 400;
+    }
+  }
+
+  @include mobile {
+    &__container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+}

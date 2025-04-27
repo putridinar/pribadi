@@ -2,7 +2,7 @@
 title: AkuPayu
 description: 
 baseurl: ""
-url: "https://yourdomain.com"
+url: "https://akupayu.vercel.app"
 
 # Markdown settings
 markdown: kramdown

@@ -109,6 +109,11 @@
         }
       }
     }
+.product_flex {
+   display: flex;
+   justify-content: space-between;
+   align-item: center;
+}
 
     .product__qty {
       h3 {
@@ -142,7 +147,7 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       display: inline-block;
-      align-self: flex-start;
+      align-self: flex-end;
       margin-top: 20px;
       transition: background-color 0.3s ease, transform 0.3s ease;
 

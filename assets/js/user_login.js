@@ -20,12 +20,12 @@ closeRegisterModal.onclick = () => {
     auth.signInWithPopup(provider)
       .then((result) => {
         const user = result.user;
-        console.log('Google login success:', user);
+        console.log('Google login success:', 'success', user);
         window.location.href = '/'; // Arahkan ke halaman home
       })
       .catch((error) => {
         console.error('Google login error:', error);
-        showAlert('Login dengan Google gagal!');
+        showAlert('Login dengan Google gagal!', 'error');
       });
   });
   
@@ -35,11 +35,17 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
 
+if (!email || !password) {
+  showAlert('Email dan Password wajib diisi!', 'warning');
+  return; // STOP dulu
+}
+
   try {
     await auth.signInWithEmailAndPassword(email, password);
     window.location.href = '/'; // Setelah login sukses
   } catch (error) {
-    showAlert(error.message);
+	    console.log(error.code);
+	  showFriendlyError(error);
   }
 });
 
@@ -84,7 +90,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
       emailVerified: false // Kita bisa update nanti kalau perlu
     });
 
-    showAlert('Registration successful! Please check your email to verify your account.');
+    showAlert('Registration successful! Please check your email to verify your account.', 'succsess');
 
     // Paksa logout supaya user gak bisa masuk sebelum verifikasi
     await auth.signOut();
@@ -98,3 +104,48 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     showAlert(error.message);
   }
 });
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    if (!user.emailVerified) {
+      // Kalau belum verifikasi
+      showAlert('Akun Anda belum terverifikasi. Silakan cek email Anda untuk verifikasi.', 'warning');
+      
+      // Kasih delay dikit buat user baca alert
+      setTimeout(() => {
+        auth.signOut(); // Paksa logout
+        window.location.href = '/userLogin'; // Arahkan ke login
+      }, 3000); // 3 detik
+    }
+  }
+});
+
+function showFriendlyError(error) {
+  let message = 'Terjadi kesalahan. Coba lagi.';
+  
+    console.log(error.code);
+
+  switch (error.code) {
+    case 'auth/invalid-login-credentials':
+    case 'auth/wrong-password':
+    case 'auth/user-not-found':
+      message = 'Email atau password salah. Silakan periksa kembali.';
+      break;
+    case 'auth/email-already-in-use':
+      message = 'Email sudah digunakan. Silakan gunakan email lain.';
+      break;
+    case 'auth/too-many-requests':
+      message = 'Terlalu banyak percobaan login. Coba lagi nanti.', 'error';
+      break;
+    case 'auth/network-request-failed':
+      message = 'Koneksi internet bermasalah. Cek jaringan Anda.';
+      break;
+    case 'auth/internal-error':
+      message = 'Ada masalah pada server atau data kosong. Coba isi semua field atau refresh browser Anda.', 'warning';
+      break;
+    default:
+      message = error.message; // fallback default
+  }
+
+  showAlert(message, type = 'error');
+}

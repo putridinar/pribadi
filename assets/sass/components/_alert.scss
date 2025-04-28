@@ -11,6 +11,7 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+
 }
 
 .global-alert__content,
@@ -69,6 +70,25 @@
 .show {
   opacity: 1;
   pointer-events: auto;
+  
+  &--success {
+    background: #00f72042;
+    backdrop-filter: blur(8px);
+    transition: opacity .3s ease;
+  }
+
+  &--warning {
+    background: #ffca0042;
+    color: #333;
+    backdrop-filter: blur(8px);
+    transition: opacity .3s ease;
+  }
+
+  &--error {
+    background: #73020c69;
+    backdrop-filter: blur(8px);
+    transition: opacity .3s ease;
+  }
 }
 
 // Animations

@@ -4,7 +4,7 @@ port: 8888
 title: AkuPayu
 description: 
 baseurl: ""
-url: "https://akupayu.vercel.app"
+url: "https://akupayu.pages.dev"
 
 # Markdown settings
 markdown: kramdown

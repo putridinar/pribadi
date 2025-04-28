@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageUrl = document.getElementById('product-image-url').value.trim();
 
     if (!name || !price || !category || !description || !imageUrl) {
-      showAlert('Semua field wajib diisi!');
+      showAlert('Semua field wajib diisi!', 'warning');
       return;
     }
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
     } catch (error) {
       console.error('Error uploading product:', error);
-      showAlert('Terjadi kesalahan saat upload produk.');
+      showAlert('Terjadi kesalahan saat upload produk.', 'error');
     }
   });
 
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Render pagination
-  function renderPagination(totalPages) {
+ function renderPagination(totalPages) {
     let paginationHtml = '<div class="admin__pagination">';
     for (let i = 1; i <= totalPages; i++) {
       paginationHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteButtons.forEach(button => {
       button.addEventListener('click', async (e) => {
         const id = e.target.dataset.id;
-        if (confirm('Yakin mau hapus produk ini?')) {
+        if (showConfirm('Yakin mau hapus produk ini?')) {
           await db.collection('products').doc(id).delete();
         }
       });
@@ -196,13 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
               imageUrl: document.getElementById('product-image-url').value.trim()
             });
 
-            showAlert('Produk berhasil diupdate!');
+            showAlert('Produk berhasil diupdate!', 'success');
             form.reset();
             submitButton.textContent = 'Upload Produk';
             form.onsubmit = defaultSubmitHandler;
           } catch (error) {
             console.error('Error updating product:', error);
-            showAlert('Gagal update produk.');
+            showAlert('Gagal update produk.', 'error');
           }
         }
       });

@@ -4,45 +4,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('search-input');
   const filterCategory = document.getElementById('filter-category');
   const spinner = document.querySelector('.admin__spinner');
-  
-	const auth = firebase.auth();
 
-	// Cek apakah user sudah login
-	auth.onAuthStateChanged(async (user) => {
-	  if (!user) {
-		window.location.href = '/loginAdmin'; // Belum login -> ke login
-		return;
-	  }
+        const auth = firebase.auth();
 
-	  try {
-		const userDoc = await db.collection('users').doc(user.uid).get();
-		if (!userDoc.exists) {
-		  window.location.href = '/403'; // User tidak terdaftar
-		  return;
-		}
+        // Cek apakah user sudah login
+        auth.onAuthStateChanged(async (user) => {
+          if (!user) {
+                window.location.href = '/loginAdmin'; // Belum login -> ke login
+                return;
+          }
 
-		const userData = userDoc.data();
-		if (userData.role !== 'admin') {
-		  window.location.href = '/403'; // Bukan admin -> tendang
-		  return;
-		}
+          try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (!userDoc.exists) {
+                  window.location.href = '/403'; // User tidak terdaftar
+                  return;
+                }
 
-		console.log('Welcome Admin!'); // Kalau admin, lanjut akses
-	  } catch (error) {
-		console.error('Error fetching user data:', error);
-		window.location.href = '/403'; // Error ambil data -> tendang
-	  }
-	});
+                const userData = userDoc.data();
+                if (userData.role !== 'admin') {
+                  window.location.href = '/403'; // Bukan admin -> tendang
+                  return;
+                }
 
-	// Logout Button (optional)
-	const logoutBtn = document.getElementById('logout-btn');
-	if (logoutBtn) {
-	  logoutBtn.addEventListener('click', () => {
-		auth.signOut().then(() => {
-		  window.location.href = '/loginAdmin';
-		});
-	  });
-	}
+                console.log('Welcome Admin!'); // Kalau admin, lanjut akses
+          } catch (error) {
+                console.error('Error fetching user data:', error);
+                window.location.href = '/403'; // Error ambil data -> tendang
+          }
+        });
+
+        // Logout Button (optional)
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', () => {
+                auth.signOut().then(() => {
+                  window.location.href = '/loginAdmin';
+                });
+          });
+        }
 
   let productsData = []; // simpan semua data produk
   const pageSize = 6; // produk per halaman
@@ -141,32 +141,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Render pagination
  function renderPagination(totalPages) {
-    let paginationHtml = '<div class="admin__pagination">';
-    for (let i = 1; i <= totalPages; i++) {
-      paginationHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
-    }
-    paginationHtml += '</div>';
-    productsContainer.insertAdjacentHTML('afterend', paginationHtml);
-
-    document.querySelectorAll('.page-btn').forEach(button => {
-      button.addEventListener('click', (e) => {
-        currentPage = parseInt(e.target.dataset.page);
-        renderProducts();
-      });
-    });
+  // Hapus pagination lama
+  const existingPagination = document.querySelector('.admin__pagination');
+  if (existingPagination) {
+    existingPagination.remove();
   }
+
+  // Buat pagination baru
+  let paginationHtml = '<div class="admin__pagination">';
+  for (let i = 1; i <= totalPages; i++) {
+    paginationHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+  }
+  paginationHtml += '</div>';
+  productsContainer.insertAdjacentHTML('afterend', paginationHtml);
+
+  document.querySelectorAll('.page-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+      currentPage = parseInt(e.target.dataset.page);
+      renderProducts();
+    });
+  });
+}
 
   // Attach event untuk tombol edit/hapus
   function attachProductEvents() {
     const deleteButtons = document.querySelectorAll('.delete-btn');
-    deleteButtons.forEach(button => {
-      button.addEventListener('click', async (e) => {
-        const id = e.target.dataset.id;
-        if (showConfirm('Yakin mau hapus produk ini?')) {
-          await db.collection('products').doc(id).delete();
-        }
-      });
-    });
+ deleteButtons.forEach(button => {
+  button.addEventListener('click', async (e) => {
+    const id = e.target.dataset.id;
+    if (showConfirm('Yakin mau hapus produk ini?')) {
+      try {
+        await db.collection('products').doc(id).delete();
+        showAlert('Produk berhasil dihapus.', 'success');
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        showAlert('Gagal menghapus produk.', 'error');
+      }
+    }
+  });
+});
 
     const editButtons = document.querySelectorAll('.edit-btn');
     editButtons.forEach(button => {
@@ -184,27 +197,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitButton = form.querySelector('.admin__btn');
         submitButton.textContent = 'Update Produk';
 
-        form.onsubmit = async (ev) => {
-          ev.preventDefault();
+  form.onsubmit = async (ev) => {
+  ev.preventDefault();
 
-          try {
-            await db.collection('products').doc(id).update({
-              name: document.getElementById('product-name').value.trim(),
-              price: parseFloat(document.getElementById('product-price').value),
-              category: document.getElementById('product-category').value,
-              description: document.getElementById('product-description').value.trim(),
-              imageUrl: document.getElementById('product-image-url').value.trim()
-            });
+  try {
+    await db.collection('products').doc(id).update({
+      name: document.getElementById('product-name').value.trim(),
+      price: parseFloat(document.getElementById('product-price').value),
+      category: document.getElementById('product-category').value,
+      description: document.getElementById('product-description').value.trim(),
+      imageUrl: document.getElementById('product-image-url').value.trim()
+    });
 
-            showAlert('Produk berhasil diupdate!', 'success');
-            form.reset();
-            submitButton.textContent = 'Upload Produk';
-            form.onsubmit = defaultSubmitHandler;
-          } catch (error) {
-            console.error('Error updating product:', error);
-            showAlert('Gagal update produk.', 'error');
-          }
-        }
+    showAlert('Produk berhasil diupdate!', 'success');
+    form.reset();
+    submitButton.textContent = 'Upload Produk';
+
+    // Kembalikan fungsi ke handler default
+    form.onsubmit = defaultSubmitHandler;
+  } catch (error) {
+    console.error('Error updating product:', error);
+    showAlert('Gagal update produk.', 'error');
+  }
+};
       });
     });
   }

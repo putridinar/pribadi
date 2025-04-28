@@ -1,3 +1,5 @@
+port: 8888
+
 # Site settings
 title: AkuPayu
 description: 
@@ -23,3 +25,12 @@ exclude:
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+
+# firebase
+apiKey: AIzaSyA99UicCEfUFVp4BnR1eCUTjCkmxdMoYU4
+authDomain: akupayu-store.firebaseapp.com
+projectId: akupayu-store
+storageBucket: akupayu-store.firebasestorage.app
+senderId: 1045297237083
+appId: 1:1045297237083:web:9aba8aba181967d44e037e
+measId: G-4K3M7WNNLY

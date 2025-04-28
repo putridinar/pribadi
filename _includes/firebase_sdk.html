@@ -1,0 +1,18 @@
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "{{site.apiKey}}",
+    authDomain: "{{site.authDomain}}",
+    projectId: "{{site.projectId}}",
+    storageBucket: "{{site.storageBucket}}",
+    senderId: "{{site.senderId}}",
+    appId: "{{site.appId}}",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+</script>

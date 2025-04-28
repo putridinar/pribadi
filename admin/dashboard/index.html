@@ -1,0 +1,63 @@
+---
+layout: page
+title: Dashboard Admin
+permalink: /dashboard
+---
+<section class="admin">
+
+  <div class="admin__container">
+  <div class="flex_header">
+    <h1 class="admin__title">Upload Produk Baru</h1>
+
+<button id="logout-btn" class="admin__btn">Logout</button>
+	</div>
+<form class="admin__form">
+  <div class="admin__form-group">
+    <label for="product-image-url">URL Gambar Produk</label>
+    <input type="url" id="product-image-url" name="product-image-url" placeholder="Tempel URL gambar produk" required>
+  </div>
+  
+  <div class="admin__form-group">
+    <label for="product-name">Nama Produk</label>
+    <input type="text" id="product-name" name="product-name" placeholder="Masukkan nama produk" required>
+  </div>
+
+  <div class="admin__form-group">
+    <label for="product-price">Harga Produk</label>
+    <input type="number" id="product-price" name="product-price" placeholder="Masukkan harga" required>
+  </div>
+
+  <div class="admin__form-group">
+    <label for="product-category">Kategori</label>
+    <select id="product-category" name="product-category" required>
+      <option value="">Pilih Kategori</option>
+      <option value="streetwear">Streetwear</option>
+      <option value="casual">Casual</option>
+      <option value="sportswear">Sportswear</option>
+    </select>
+  </div>
+
+  <div class="admin__form-group">
+    <label for="product-description">Deskripsi Produk</label>
+    <textarea id="product-description" name="product-description" rows="5" placeholder="Tulis deskripsi produk" required></textarea>
+  </div>
+
+  <button type="submit" class="admin__btn">Upload Produk</button>
+</form>
+
+    <h2 class="admin__subtitle">Daftar Produk</h2>
+	<div class="admin__controls">
+	  <input type="text" id="search-input" placeholder="Cari produk..." />
+	  <select id="filter-category">
+		<option value="">Semua Kategori</option>
+		<option value="streetwear">Streetwear</option>
+		<option value="casual">Casual</option>
+		<option value="sportswear">Sportswear</option>
+	  </select>
+	</div>
+    <div class="admin__products">
+      <div class="admin__spinner" style="display: none;">Loading...</div>
+    </div>
+  </div>
+</section>
+<script src="{{ '/assets/js/add_product.js' | relative_url }}"></script>

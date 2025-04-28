@@ -11,3 +11,7 @@
 @use 'components/card';
 @use 'components/products';
 @use 'pages/home';
+@use 'pages/admin';
+@use 'pages/error' as *;
+@use 'components/alert' as *;
+@use 'layout/login' as *;

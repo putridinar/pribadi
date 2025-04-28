@@ -1,25 +1,22 @@
 @use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
+@use 'sass:math';
 
 .header {
-  font-family: 'Playfair Display', serif;
-  min-height: 100vh;
-  background: linear-gradient(to right, #000000, #434343);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-  
   &__container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 0;
+    position: sticky;
+    top: 0;
+	background: linear-gradient(to right, #000000, #434343);
+    z-index: 1000;
+    padding: 1rem 2rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease;
+
+    &.scrolled {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
   }
 
   &__logo {
@@ -27,13 +24,18 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
+	color: white;
+    @include mobile {
+		font-size: 1rem;
+		}
   }
 
-  &__nav ul {
+  &__nav {
+    ul {
     display: flex;
     gap: 30px;
     list-style: none;
-    
+
     li a {
       text-decoration: none;
       color: white;
@@ -56,22 +58,85 @@
         width: 100%;
       }
     }
+    }
+
+    // --- Mobile Offcanvas ---
+    @include mobile {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100vw;
+      height: 100vh;
+      background-color: hsl(46deg 0% 0% / 85%);
+      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      transition: right 0.3s ease;
+      z-index: 1500;
+
+      ul {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      &.active {
+        right: 0;
+      }
+    }
   }
+
+  // Burger Button
+  &__burger {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 9900;
+
+  span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.4s ease;
+    transform-origin: center;
+  }
+
+  @include mobile {
+    display: flex;
+  }
+
+  &.active {
+    span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    span:nth-child(2) {
+      opacity: 0;
+    }
+    span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+  }
+}
 
   &__hero {
     text-align: center;
-    margin-bottom: 100px;
+    padding: 14rem 2rem;
+    background: url('https://staindirundeng.ac.id/wp-content/uploads/2016/05/placeholder.gif') center/cover no-repeat;
+    color: #fff;
 
     h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 20px;
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
 
     p {
-      font-size: 1.2rem;
-      margin-bottom: 40px;
-      opacity: 0.8;
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
     }
 
     .header__btn {
@@ -90,25 +155,8 @@
       }
     }
   }
-
-  @include mobile {
-    &__container {
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    &__nav ul {
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    &__hero {
-      h1 {
-        font-size: 2rem;
-      }
-    }
-  }
 }
+
 @keyframes fadeIn {
   0% {
     opacity: 0;

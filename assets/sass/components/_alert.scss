@@ -1,0 +1,92 @@
+.global-alert,
+.global-confirm {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.global-alert__content,
+.global-confirm__content {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(20px);
+  padding: 2rem 2.5rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: fadeInUp 0.5s ease;
+}
+
+.global-confirm__actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+
+  .btn-confirm, .btn-cancel {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-confirm {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: #fff;
+
+    &:hover {
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      transform: translateY(-2px);
+    }
+  }
+
+  .btn-cancel {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+
+    &:hover {
+      background: rgba(255,255,255,0.4);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Show class
+.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+// Animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .global-alert__content,
+  .global-confirm__content {
+    padding: 1.5rem;
+  }
+}

@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: page.lang | default: 'en' }}">
+<html lang="{{ site.lang | default: page.lang | default: 'id | ID' }}">
 
   {% include head.html %}
 
   <body>
+  {% include mini_header.html %}
 
     <main class="main" aria-label="Content">
       {{ content }}
     </main>
 
+  {% include showGlobal.html %}
+  {% include javascript.html %}
   </body>
 
 </html>

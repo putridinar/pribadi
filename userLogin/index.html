@@ -1,0 +1,66 @@
+---
+layout: none
+title: User Login
+permalink: /userLogin
+---
+
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: page.lang | default: 'id | ID' }}">
+
+  {% include head.html %}
+  
+<body class="login-page">
+
+  <div class="login-container">
+    <h1 style="margin: 0 0 18px;">Welcome Back</h1>
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Email" required>
+      <input type="password" id="login-password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+	<div class="login-with-google" style="margin: auto;">
+	  <button id="google-login-btn">
+		<img class="style" src="{{site.baseurl}}/assets/images/google.png" alt="Google Icon" />
+		Continue with Google
+	  </button>
+	</div>
+
+    <p>Don't have an account? <a href="javascript:void(0);" id="open-register-modal">Register Now</a></p>
+  </div>
+
+  <!-- Modal Register -->
+  <div id="register-modal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <h2>Create Account</h2>
+      <form id="register-form">
+        <div class="input-group">
+          <input type="text" id="first-name" placeholder="First Name" required>
+          <input type="text" id="last-name" placeholder="Last Name" required>
+        </div>
+        <input type="email" id="register-email" placeholder="Email" required>
+        <input type="password" id="register-password" placeholder="Password" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
+        <select id="gender" required>
+          <option value="">Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+		<div class="input-group">
+        <input type="text" id="address" placeholder="Home Address" required>
+        <input type="text" id="city" placeholder="City" required>
+        <input type="text" id="postal-code" placeholder="Postal Code" required>
+        <input type="text" id="province" placeholder="Province" required>
+        <input type="text" id="country" placeholder="Country" required>
+		</div>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="{{ '/assets/js/user_login.js' | relative_url }}"></script>
+  {% include showGlobal.html %}
+  {% include javascript.html %}
+</body>
+</html>

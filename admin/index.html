@@ -1,0 +1,25 @@
+---
+layout: none
+title: Login Admin
+permalink: /loginAdmin
+---
+
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: page.lang | default: 'id | ID' }}">
+  {% include head.html %}
+<body class="admin-login">
+
+  <div class="admin-login__container">
+    <h1>{{page.title}}</h1>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit" class="admin__btn">Login</button>
+    </form>
+    <div id="login-error" class="admin-login__error"></div>
+  </div>
+
+  <script type="module" src="{{ '/assets/js/admin_login.js' | relative_url }}"></script>
+
+</body>
+</html>

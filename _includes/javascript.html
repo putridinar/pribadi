@@ -1,0 +1,55 @@
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const headerContainer = document.querySelector('.header__container');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 10) {
+      headerContainer.classList.add('scrolled');
+    } else {
+      headerContainer.classList.remove('scrolled');
+    }
+  });
+});
+
+const hamburger = document.getElementById('burger');
+const nav = document.querySelector('.header__nav');
+
+hamburger.addEventListener('click', () => {
+  nav.classList.toggle('active');
+  hamburger.classList.toggle('active');
+});
+
+// Global Alert
+function showAlert(message = '', duration = 3000) {
+  const alertBox = document.getElementById('global-alert');
+  const alertMessage = document.getElementById('global-alert-message');
+  alertMessage.innerText = message;
+  alertBox.classList.add('show');
+  setTimeout(() => {
+    alertBox.classList.remove('show');
+  }, duration);
+}
+
+// Global Confirm
+function showConfirm(message = '') {
+  return new Promise((resolve) => {
+    const confirmBox = document.getElementById('global-confirm');
+    const confirmMessage = document.getElementById('global-confirm-message');
+    const yesBtn = document.getElementById('global-confirm-yes');
+    const noBtn = document.getElementById('global-confirm-no');
+
+    confirmMessage.innerText = message;
+    confirmBox.classList.add('show');
+
+    yesBtn.onclick = () => {
+      confirmBox.classList.remove('show');
+      resolve(true);
+    };
+
+    noBtn.onclick = () => {
+      confirmBox.classList.remove('show');
+      resolve(false);
+    };
+  });
+}
+</script>

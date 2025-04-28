@@ -15,7 +15,7 @@ function fetchProducts() {
             <div class="product-card__info">
               <h3 class="product-card__title">${product.name}</h3>
               <p class="product-card__price">$${product.price}</p>
-              <a href="/product" class="product-card__btn">Add to Cart</a>
+      <a href="/product?id=${product.id}" class="product-card__btn">Lihat Detail</a>
             </div>
           `;
 

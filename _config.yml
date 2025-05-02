@@ -27,10 +27,11 @@ plugins:
   - jekyll-sitemap
 
 # firebase
-apiKey: AIzaSyA99UicCEfUFVp4BnR1eCUTjCkmxdMoYU4
-authDomain: akupayu-store.firebaseapp.com
-projectId: akupayu-store
-storageBucket: akupayu-store.firebasestorage.app
-senderId: 1045297237083
-appId: 1:1045297237083:web:9aba8aba181967d44e037e
-measId: G-4K3M7WNNLY
+apiKey: AIzaSyBsWW-G3USjSI4NXP-6wjifcgYlRq5_O0s
+authDomain: whatsgo-id.firebaseapp.com
+projectId: whatsgo-id
+databaseURL: https://whatsgo-id.firebaseio.com
+storageBucket: whatsgo-id.appspot.com
+senderId: 785900266338
+appId: 1:785900266338:web:414e9b8792ec4737f4c23b
+measId: G-XEGBQPYFSJ

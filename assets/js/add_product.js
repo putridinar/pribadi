@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentPage = 1;
 
   // Form submit: tambah produk
-  form.addEventListener('submit', async (e) => {
+/*  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const name = document.getElementById('product-name').value.trim();
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error uploading product:', error);
       showAlert('Terjadi kesalahan saat upload produk.', 'error');
     }
-  });
+  }); */
 
   // Realtime load produk
   db.collection('products').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
@@ -163,66 +163,124 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 }
 
-  // Attach event untuk tombol edit/hapus
-  function attachProductEvents() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
- deleteButtons.forEach(button => {
-  button.addEventListener('click', async (e) => {
-    const id = e.target.dataset.id;
-    if (showConfirm('Yakin mau hapus produk ini?')) {
-      try {
-        await db.collection('products').doc(id).delete();
-        showAlert('Produk berhasil dihapus.', 'success');
-      } catch (error) {
-        console.error('Error deleting product:', error);
-        showAlert('Gagal menghapus produk.', 'error');
+// Attach event untuk tombol edit/hapus
+function attachProductEvents() {
+  // Hapus produk
+  const deleteButtons = document.querySelectorAll('.delete-btn');
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const id = e.target.dataset.id;
+      if (showConfirm('Yakin mau hapus produk ini?')) {
+        try {
+          await db.collection('products').doc(id).delete();
+          showAlert('Produk berhasil dihapus.', 'success');
+          fetchProducts(); // Reload produk setelah hapus
+        } catch (error) {
+          console.error('Error deleting product:', error);
+          showAlert('Gagal menghapus produk.', 'error');
+        }
       }
-    }
+    });
   });
-});
+  
+  // Edit produk
+const editButtons = document.querySelectorAll('.edit-btn');
+  editButtons.forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const id = e.target.dataset.id;
+      const doc = await db.collection('products').doc(id).get();
+      const data = doc.data();
 
-    const editButtons = document.querySelectorAll('.edit-btn');
-    editButtons.forEach(button => {
-      button.addEventListener('click', async (e) => {
-        const id = e.target.dataset.id;
-        const doc = await db.collection('products').doc(id).get();
-        const data = doc.data();
+      // Isikan nilai ke form untuk edit produk
+      document.getElementById('product-name').value = data.name;
+      document.getElementById('product-price').value = data.price;
+      document.getElementById('product-category').value = data.category;
+      document.getElementById('product-description').value = data.description;
+      document.getElementById('product-image-url').value = data.imageUrl;
 
-        document.getElementById('product-name').value = data.name;
-        document.getElementById('product-price').value = data.price;
-        document.getElementById('product-category').value = data.category;
-        document.getElementById('product-description').value = data.description;
-        document.getElementById('product-image-url').value = data.imageUrl;
+      const submitButton = form.querySelector('.admin__btn');
+      submitButton.textContent = 'Update Produk'; // Ubah tombol submit menjadi "Update Produk"
 
-        const submitButton = form.querySelector('.admin__btn');
-        submitButton.textContent = 'Update Produk';
+      // Ganti form submit untuk update produk
+      form.onsubmit = async (ev) => {
+        ev.preventDefault();
 
-  form.onsubmit = async (ev) => {
+        try {
+          // Update produk di Firestore
+          await db.collection('products').doc(id).update({
+            name: document.getElementById('product-name').value.trim(),
+            price: parseFloat(document.getElementById('product-price').value),
+            category: document.getElementById('product-category').value,
+            description: document.getElementById('product-description').value.trim(),
+            imageUrl: document.getElementById('product-image-url').value.trim()
+          });
+
+          showAlert('Produk berhasil diupdate!', 'success');
+          form.reset();
+          submitButton.textContent = 'Upload Produk'; // Kembalikan tombol submit ke "Upload Produk"
+
+          // Setelah update, kembalikan form ke handler default (untuk tambah produk)
+          form.onsubmit = defaultSubmitHandler;
+
+          // Reload produk setelah update
+          fetchProducts(); // Update produk setelah update
+        } catch (error) {
+          console.error('Error updating product:', error);
+          showAlert('Gagal update produk.', 'error');
+        }
+      };
+    });
+  });
+}
+
+// Default submit handler untuk tambah produk
+function defaultSubmitHandler(ev) {
   ev.preventDefault();
 
+  // Ambil data produk dari form dan kirim ke Firestore untuk menambah produk baru
   try {
-    await db.collection('products').doc(id).update({
+    const newProduct = {
       name: document.getElementById('product-name').value.trim(),
       price: parseFloat(document.getElementById('product-price').value),
       category: document.getElementById('product-category').value,
       description: document.getElementById('product-description').value.trim(),
-      imageUrl: document.getElementById('product-image-url').value.trim()
-    });
+      imageUrl: document.getElementById('product-image-url').value.trim(),
+      createdAt: new Date(),
+    };
 
-    showAlert('Produk berhasil diupdate!', 'success');
-    form.reset();
-    submitButton.textContent = 'Upload Produk';
-
-    // Kembalikan fungsi ke handler default
-    form.onsubmit = defaultSubmitHandler;
-  } catch (error) {
-    console.error('Error updating product:', error);
-    showAlert('Gagal update produk.', 'error');
-  }
-};
+    // Menambah produk baru ke Firestore
+    db.collection('products').add(newProduct)
+      .then(() => {
+        showAlert('Produk berhasil ditambahkan!', 'success');
+        form.reset();
+        fetchProducts(); // Update produk setelah ditambah
+      })
+      .catch(error => {
+        console.error('Error adding product:', error);
+        showAlert('Gagal menambahkan produk.', 'error');
       });
-    });
+  } catch (error) {
+    console.error('Error submitting product:', error);
+    showAlert('Gagal menambahkan produk.', 'error');
   }
+}
+
+// Fungsi untuk menampilkan alert
+function showAlert(message, type) {
+  const alertBox = document.createElement('div');
+  alertBox.classList.add('alert', type);
+  alertBox.innerText = message;
+  document.body.appendChild(alertBox);
+  setTimeout(() => {
+    alertBox.remove();
+  }, 3000);
+}
+
+// Fungsi untuk konfirmasi
+function showConfirm(message) {
+  return window.confirm(message);
+}
+
 
   // Search and filter listener
   searchInput.addEventListener('input', () => {
@@ -234,6 +292,4 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPage = 1;
     renderProducts();
   });
-
-  const defaultSubmitHandler = form.onsubmit;
 });
